@@ -12,7 +12,7 @@ services:
       - 5432:5432
 
 
-  app:
+  src:
     build: .
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/employee_management_system

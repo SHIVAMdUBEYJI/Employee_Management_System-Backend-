@@ -19,7 +19,7 @@ RUN mvn clean package -DskipTests
 
 # Stage 2: Run
 FROM openjdk:17-jdk-slim
-COPY --from=builder /app/target/*.jar /employee-management-service.jar
+COPY --from=builder /sr/target/*.jar /employee-management-service.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/employee-management-service.jar"]
 
