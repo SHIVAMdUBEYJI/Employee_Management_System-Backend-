@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 66886388babu
+      POSTGRES_DB: employee_management_system
+    ports:
+      - 5432:5432
+
+  app:
+    build: .
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/employee_management_system
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 66886388babu
+    depends_on:
+      - db
