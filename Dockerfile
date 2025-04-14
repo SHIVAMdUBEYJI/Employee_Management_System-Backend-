@@ -1,12 +1,26 @@
-FROM ubuntu:latest
+#FROM ubuntu:latest
+#
+#FROM  openjdk
+#
+#LABEL authors="shivam dubey"
+#
+#COPY target/*.jar /employee-management-service.jar
+#
+#ENTRYPOINT ["java", "-jar", "/employee-management-service.jar"]
+#
+#EXPOSE 8080
 
-FROM  openjdk
 
-LABEL authors="shivam dubey"
+# Stage 1: Build
+FROM maven:3.8.5-openjdk-17 AS builder
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-COPY target/*.jar /employee-management-service.jar
-
+# Stage 2: Run
+FROM openjdk:17-jdk-slim
+COPY --from=builder /app/target/*.jar /employee-management-service.jar
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/employee-management-service.jar"]
 
-EXPOSE 8080
 
