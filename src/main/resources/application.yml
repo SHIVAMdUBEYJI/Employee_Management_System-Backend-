@@ -20,7 +20,7 @@ spring:
     url: spring.datasource.url=jdbc:postgresql://db:5432/employee_management_system
     username: postgres
     password: 66886388babu
-    driver-class-name: org.postgresql.Driver
+
 
   jpa:
     hibernate:
