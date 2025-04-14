@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -41,28 +42,28 @@ public class EmployeeController {
             return new ResponseEntity<>(newEmployee, HttpStatus.OK);
 
         } catch (EmployeeAlreadyExists exception) {
-            return new ResponseEntity<>(exception, HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Employee With this email : " + employee.getEmail() + " already exists!!", HttpStatus.CONFLICT);
         }
     }
 
+
     @GetMapping("/getAll")
-    public Page<Employee> getAllEmployee(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size) {
+    public Page<Employee> getAllEmployee(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
         return employeeRepository.findAll(pageable);
     }
+
 
     @GetMapping("/findById/{id}")
     public Optional<Employee> findById(@PathVariable Long id) {
         return employeeRepository.findById(id);
     }
 
-//    @GetMapping("/findByEmail/{email}")
-//        public ResponseEntity<?>  findByEmail(@PathVariable String email){
-//            return employeeRepository.findByEmail(email);
-//        }
-
+    @GetMapping("/search")
+    public ResponseEntity<List<Employee>> searchEmployees(@RequestParam String fullName) {
+        List<Employee> employees = employeeService.searchByFullName(fullName);
+        return new ResponseEntity<>(employees, HttpStatus.OK);
+    }
 
 
     @PutMapping("/update/{id}")
@@ -73,6 +74,7 @@ public class EmployeeController {
             return new ResponseEntity<>("Employee does not exists !!", HttpStatus.NOT_FOUND);
         }
     }
+
     @DeleteMapping("/delete/{id}")
     public void deleteById(@PathVariable Long id) {
         employeeService.deleteEmployee(id);

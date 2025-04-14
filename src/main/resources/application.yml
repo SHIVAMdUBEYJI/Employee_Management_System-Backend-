@@ -1,0 +1,35 @@
+#spring.application.name=Employee_Management_System
+#spring.jpa.hibernate.ddl-auto=update
+#spring.jpa.hibernate.show-sql=true
+#spring.datasource.url=jdbc:postgresql://localhost:5432/employee_management_system
+#spring.datasource.username=postgres
+#spring.datasource.password=66886388babu
+
+server:
+  port: 8080
+
+  error:
+    include-message: always
+
+spring:
+  application:
+    name: employee-management-service
+
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/employee_management_system
+    username: postgres
+    password: 66886388babu
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+
+

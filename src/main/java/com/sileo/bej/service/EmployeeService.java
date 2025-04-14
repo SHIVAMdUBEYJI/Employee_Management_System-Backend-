@@ -7,6 +7,9 @@ import com.sileo.bej.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class EmployeeService {
@@ -14,9 +17,13 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
 
     public Employee createEmployee(Employee employee) throws EmployeeAlreadyExists {
+        Optional<Employee> existingEmployee = employeeRepository.findByEmail(employee.getEmail());
+        if (existingEmployee.isPresent()) {
+            throw new EmployeeAlreadyExists("Employee With this email ID already Exists,PLease enter new Email!!");
+
+        }
         return employeeRepository.save(employee);
     }
-
 
     public Employee updateEmployee(Long id, Employee updatedEmployee) throws EmployeeDoesNotExistsException {
         Employee existingEmployee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeDoesNotExistsException("Employee does not exists ,Please Check again!!"));
@@ -33,12 +40,17 @@ public class EmployeeService {
         return employeeRepository.save(existingEmployee);
     }
 
-    Employee FindEmployeeByEmail(String email) {
+    Optional<Employee> FindEmployeeByEmail(String email) {
         return employeeRepository.findByEmail(email);
+    }
+
+    public List<Employee> searchByFullName(String fullName) {
+        return employeeRepository.findByFullNameContainingIgnoreCase(fullName);
     }
 
     public void deleteEmployee(Long id) {
         employeeRepository.deleteById(id);
     }
+
 
 }
