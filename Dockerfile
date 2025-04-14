@@ -8,5 +8,5 @@ COPY target/*.jar /employee-management-service.jar
 
 ENTRYPOINT ["java", "-jar", "/employee-management-service.jar"]
 
-EXPOSE 8080;
+EXPOSE 8080
 
