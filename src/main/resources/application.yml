@@ -13,9 +13,9 @@ spring:
     name: employee-management-service
 
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:5432/employee_management_system
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:66886388babu}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:

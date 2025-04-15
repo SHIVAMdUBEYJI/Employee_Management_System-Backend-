@@ -15,8 +15,9 @@ services:
   src:
     build: .
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/employee_management_system
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 66886388babu
+      DB_HOST: db
+      DB_USERNAME: postgres
+      DB_PASSWORD: 66886388babu
     depends_on:
       - db
+
