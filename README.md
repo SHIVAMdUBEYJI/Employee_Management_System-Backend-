@@ -1,0 +1,1 @@
+It' an Online Employee_Management_System_Application's backend part.Here We are performing basic CRUD operations that can happpen in an application. I am using Java as my premier language and using SpringBoot framework as well .It' s a monolythic application which performs every task in one particular layer for each entities.You can fork and run on your local system ,Thank You. 
