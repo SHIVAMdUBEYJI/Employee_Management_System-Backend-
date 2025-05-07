@@ -1,10 +1,17 @@
 package com.sileo.bej.service;
 
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
 import com.sileo.bej.entity.Employee;
+import com.sileo.bej.entity.EmployeeOrder;
 import com.sileo.bej.exception.EmployeeAlreadyExists;
 import com.sileo.bej.exception.EmployeeDoesNotExistsException;
+import com.sileo.bej.repository.EmployeeOrderRepository;
 import com.sileo.bej.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +23,37 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+    private final EmployeeOrderRepository orderRepository;
+
+    @Value("${razorpay.key.id}")
+    private String razorpayKey;
+    @Value("${razorpay.key.secret}")
+    private String razorpaySecret;
+    private RazorpayClient razorpayClient;
+
+    public EmployeeOrder createOrder(EmployeeOrder employeeOrder) throws RazorpayException {
+
+        JSONObject orderRequest = new JSONObject();
+        orderRequest.put("amount", employeeOrder.getAmount() *100);
+        orderRequest.put("currency", "INR");
+        orderRequest.put("receipt", ""); // optional but good practice
+        orderRequest.put("payment_capture", 1); // auto capture after payment
+
+        this.razorpayClient = new RazorpayClient(razorpayKey, razorpaySecret);
+        Order razorpayOrder = razorpayClient.orders.create(orderRequest);
+
+        employeeOrder.setOrderId(razorpayOrder.get("id"));
+        employeeOrder.setOrderStatus("CREATED");
+        orderRepository.save(employeeOrder);
+        return employeeOrder;
+
+
+    }
+
     public Employee createEmployee(Employee employee) throws EmployeeAlreadyExists {
         Optional<Employee> existingEmployee = employeeRepository.findByEmail(employee.getEmail());
         if (existingEmployee.isPresent()) {
-            throw new EmployeeAlreadyExists("Employee With this email ID already Exists,PLease enter new Email!!");
-
+            throw new EmployeeAlreadyExists("Employee With this email ID already Exists,Please enter new Email!!");
         }
         return employeeRepository.save(employee);
     }
